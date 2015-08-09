@@ -46,8 +46,11 @@ namespace casacore{
 
     // *************************************************
     ColumnDesc::ColumnDesc(casa::BaseColumnDesc const&){colPtr_p = new BaseColumnDesc;}
+    ColumnDesc::ColumnDesc(const ColumnDesc& that){colPtr_p = new BaseColumnDesc;}
+    ColumnDesc::ColumnDesc(){colPtr_p = new BaseColumnDesc;}
     ColumnDesc::~ColumnDesc(){delete colPtr_p;}
     void ColumnDesc::name() const{}
+    DataType ColumnDesc::dataType() const{return TpInt;}
 
     // *************************************************
 
@@ -152,7 +155,7 @@ namespace casacore{
     void BaseColumnDesc::checkRename(casa::ColumnDescSet const&, casa::String const&) const{}
     void BaseColumnDesc::checkAdd(casa::ColumnDescSet const&) const{}
     void BaseColumnDesc::tableDesc(){}
-    int BaseColumnDesc::dataType(){return 0;}
+    DataType BaseColumnDesc::dataType(){return TpInt;}
 
     // *************************************************
     TableConformanceError::TableConformanceError(casa::String const&, casa::AipsError::Category){}

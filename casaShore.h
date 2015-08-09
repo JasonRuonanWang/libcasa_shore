@@ -30,10 +30,12 @@ namespace casacore{
 
     class ColumnDesc{
         public:
-            ColumnDesc(casa::BaseColumnDesc const&);
+            ColumnDesc(const BaseColumnDesc&);
+            ColumnDesc(const ColumnDesc& that);
+            ColumnDesc();
             ~ColumnDesc();
             void name() const;
-            int dataType() const;
+            DataType dataType() const;
             BaseColumnDesc* colPtr_p;
     };
 
@@ -60,7 +62,7 @@ namespace casacore{
             virtual void checkRename (const ColumnDescSet& cds, const String& newName) const;
             void checkAdd (const ColumnDescSet& cds) const;
             void tableDesc();
-            int dataType();
+            DataType dataType();
     };
 
     class TableDesc {
