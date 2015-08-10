@@ -15,8 +15,6 @@ namespace casacore{
             void put(uInt rowid, T data);
     };
 
-
-
     // **************** below this line is bullshit *****************
 
     class Table {
@@ -32,7 +30,14 @@ namespace casacore{
 
     template<class T> class ScalarColumnDesc : public BaseColumnDesc {
         public:
-            ScalarColumnDesc(const String& name);
+            ScalarColumnDesc(const String&);
+            ScalarColumnDesc(const String&, string);
+    };
+
+    template<class T> class ArrayColumnDesc : public BaseColumnDesc {
+        public:
+            ArrayColumnDesc(const String&);
+            ArrayColumnDesc(const String&, int);
     };
 
     class TableDesc {
@@ -40,6 +45,7 @@ namespace casacore{
             enum TDOption {Old=1, New, NewNoReplace, Scratch, Update, Delete};
             TableDesc(const String& type, const String& version, TDOption = Old);
             void addColumn (BaseColumnDesc column);
+            string comment();
     };
 
     class DataManager{
@@ -49,8 +55,11 @@ namespace casacore{
         public:
             SetupNewTable(casa::String const&, casa::TableDesc const&, casa::Table::TableOption);
             void bindAll(DataManager);
+            void bindColumn(string,DataManager);
     };
 
+    class StManAipsIO: public DataManager{
+    };
 }
 
 #endif
