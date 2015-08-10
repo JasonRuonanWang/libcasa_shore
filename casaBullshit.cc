@@ -5,6 +5,7 @@ namespace casacore{
 
     // *************************************************
     SetupNewTable::SetupNewTable(casa::String const&, casa::TableDesc const&, casa::Table::TableOption, casa::StorageOption const&){}
+    SetupNewTable::SetupNewTable(casa::String const&, casa::TableDesc const&, casa::Table::TableOption){}
     SetupNewTable::~SetupNewTable(){}
 
     // *************************************************
@@ -14,11 +15,9 @@ namespace casacore{
 
     // *************************************************
     template<class T> ScalarColumnDesc<T>::ScalarColumnDesc(const String& name){}
+    template<> ScalarColumnDesc<int>::ScalarColumnDesc(const String& name){}
     template<class T> void ScalarColumnDesc<T>::tableDesc(){}
 
-    // *************************************************
-    template<class T> ScalarColumn<T>::ScalarColumn(casa::Table const&, casa::String const&){}
-    template<class T> void ScalarColumn<T>::put(uInt rowid, T data){}
 
     // *************************************************
     void BaseColumn::putArrayColumn(void const* data){}
@@ -45,12 +44,22 @@ namespace casacore{
     void BaseColumn::getScalar(unsigned int, int&) const{}
 
     // *************************************************
-    ColumnDesc::ColumnDesc(casa::BaseColumnDesc const&){colPtr_p = new BaseColumnDesc;}
-    ColumnDesc::ColumnDesc(const ColumnDesc& that){colPtr_p = new BaseColumnDesc;}
-    ColumnDesc::ColumnDesc(){colPtr_p = new BaseColumnDesc;}
-    ColumnDesc::~ColumnDesc(){delete colPtr_p;}
+    ColumnDesc::ColumnDesc(casa::BaseColumnDesc const&){
+        cout << "to this 1" << endl;
+        colPtr_p = this;
+        cout << colPtr_p << endl;
+    }
+    ColumnDesc::ColumnDesc(const ColumnDesc& that){
+        cout << "to this 2" << endl;
+        colPtr_p = this;}
+    ColumnDesc::ColumnDesc(){
+        cout << "to this 3" << endl;
+        colPtr_p = this;}
+    ColumnDesc::~ColumnDesc(){}
     void ColumnDesc::name() const{}
-    DataType ColumnDesc::dataType() const{return TpInt;}
+    DataType ColumnDesc::dataType() const{
+        cout << "return TpInt" << endl;
+        return TpInt;}
 
     // *************************************************
 

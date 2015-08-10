@@ -1,7 +1,3 @@
-#include <iostream>
-#include <string>
-//#include "CasaShore.h"
-
 #include <casacore/tables/Tables/SetupNewTab.h>
 #include <casacore/tables/Tables/ScaColDesc.h>
 #include <casacore/casa/namespace.h>
