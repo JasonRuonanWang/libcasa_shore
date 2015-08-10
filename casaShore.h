@@ -33,12 +33,16 @@ namespace casacore{
             ScalarColumnDesc(const String&);
             ScalarColumnDesc(const String&, string);
     };
+    template<class T> ScalarColumnDesc<T>::ScalarColumnDesc(const String&){}
+    template<class T> ScalarColumnDesc<T>::ScalarColumnDesc(const String&, string){}
 
     template<class T> class ArrayColumnDesc : public BaseColumnDesc {
         public:
             ArrayColumnDesc(const String&);
             ArrayColumnDesc(const String&, int);
     };
+    template<class T> ArrayColumnDesc<T>::ArrayColumnDesc(const String&){}
+    template<class T> ArrayColumnDesc<T>::ArrayColumnDesc(const String&, int){}
 
     class TableDesc {
         public:
