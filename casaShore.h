@@ -4,60 +4,64 @@
 #include <casacore/casa/Utilities/DataType.h>
 #include <casacore/casa/Arrays/Slicer.h>
 #include <casacore/casa/Arrays/IPosition.h>
+#include <casacore/casa/Containers/Record.h>
 
 namespace casacore{
 
     class SetupNewTable;
-
+    class DataManager;
 
     template<class T> class ScalarColumn{
         public:
             ScalarColumn(casa::Table const&, casa::String const&){}
-            void put(uInt rowid, T data){}
             T operator() (uInt rownr) {T value; get(rownr, value); return value;}
             bool isDefined(uInt){return true;}
             bool hasContent(uInt){return true;}
-            Vector<T> getColumn(){Vector<T> tmp; return tmp;}
+            void put(uInt rowid, T data){}
+            void putColumn(Vector<T> data){}
             void get(uInt,T&){}
+            Vector<T> getColumn(){Vector<T> tmp; return tmp;}
     };
 
     template<class T> class ArrayColumn{
         public:
             ArrayColumn(casa::Table const&, casa::String const&){}
-            void put(uInt rowid, Array<T> data){}
             Array<T> operator() (uInt rownr) {Array<T> value; get (rownr, value); return value;}
             bool isDefined(uInt){return true;}
             bool hasContent(uInt){return true;}
+            void get(uInt,Array<T>){}
+            void setShape(uInt,IPosition){}
+            void put(uInt rowid, Array<T> data){}
+            void putSlice(uInt rowid, Slicer, Array<T> data){}
             Array<T> getSlice(uInt, Slicer){Array<T> tmp; return tmp;}
+            void getSlice(uInt, Slicer, Array<T>){}
             Array<T> getColumn(){Array<T> tmp; return tmp;}
             Array<T> getColumn(Slicer){Array<T> tmp; return tmp;}
-            void setShape(uInt,IPosition){}
-            void get(uInt,Array<T>){}
     };
 
-
-
-    // ******************************************************************
-    // **************** below this line is all bullshit *****************
     class Table {
         public:
             enum TableOption {Old=1, New, NewNoReplace, Scratch, Update, Delete};
+            enum EndianFormat {LittleEndian, LocalEndian};
+            Table(SetupNewTable &newtab, uInt nrrows, bool a, EndianFormat b){}
             Table(SetupNewTable &newtab, uInt nrrows){}
             Table(SetupNewTable &newtab){}
-            Table(string){}
             Table(string,TableOption){}
+            Table(string){}
+            Table(){}
             uInt nrow(){return 0;}
             void addRow(){}
             void flush(){}
+            EndianFormat endianFormat(){return LocalEndian;}
+            void removeRow(uInt){}
+            void removeRow(Vector<uInt>){}
     };
 
-    // **************** another piece of bullshit  **********************
     class BaseColumnDesc{
         public:
             BaseColumnDesc(){}
     };
 
-    // **************** another piece of bullshit  **********************
     template<class T> class ScalarColumnDesc : public BaseColumnDesc {
         public:
             ScalarColumnDesc(const String&){}
@@ -65,13 +69,11 @@ namespace casacore{
             void setMaxLength(int){}
     };
 
-    // **************** another piece of bullshit  **********************
     class ColumnDesc{
         public:
             enum Option {Direct,Undefined,FixedShape};
     };
 
-    // **************** another piece of bullshit  **********************
     template<class T> class ArrayColumnDesc : public BaseColumnDesc {
         public:
             ArrayColumnDesc(const String&){}
@@ -81,7 +83,6 @@ namespace casacore{
             void setMaxLength(int){}
     };
 
-    // **************** another piece of bullshit  **********************
     class TableDesc {
         public:
             enum TDOption {Old=1, New, NewNoReplace, Scratch, Update, Delete};
@@ -90,11 +91,12 @@ namespace casacore{
             string comment(){string tmp; return tmp;}
     };
 
-    // **************** another piece of bullshit  **********************
+    typedef DataManager *(* DataManagerCtor )(const String &dataManagerType, const Record &spec);
     class DataManager{
+        public:
+            static void registerCtor(string,DataManagerCtor){}
     };
 
-    // **************** another piece of bullshit  **********************
     class SetupNewTable {
         public:
             SetupNewTable(casa::String const&, casa::TableDesc const&, casa::Table::TableOption){}
@@ -103,20 +105,32 @@ namespace casacore{
             void setShapeColumn(string, IPosition){}
     };
 
-    // **************** another piece of bullshit  **********************
     class StManAipsIO: public DataManager{
     };
 
-    // **************** another piece of bullshit  **********************
     class StandardStMan: public DataManager{
         public:
             StandardStMan(int){}
     };
 
-    // **************** another piece of bullshit  **********************
     class IncrementalStMan: public DataManager{
         public:
             IncrementalStMan(int,bool){}
+            IncrementalStMan(string,int,bool){}
+            static DataManager* makeObject(const String&, const Record&){return 0;}
+    };
+
+    class TSMShape{
+        public:
+            TSMShape(IPosition){}
+    };
+
+    class ROIncrementalStManAccessor{
+        public:
+            ROIncrementalStManAccessor(Table,string){}
+            void setCacheSize(int){}
+            void showCacheStatistics(std::ostream & )const{}
+            void clearCache(){}
     };
 }
 
