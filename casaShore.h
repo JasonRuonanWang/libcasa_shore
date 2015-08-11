@@ -43,9 +43,12 @@ namespace casacore{
         public:
             enum TableOption {Old=1, New, NewNoReplace, Scratch, Update, Delete};
             Table(SetupNewTable &newtab, uInt nrrows){}
+            Table(SetupNewTable &newtab){}
             Table(string){}
             Table(string,TableOption){}
             uInt nrow(){return 0;}
+            void addRow(){}
+            void flush(){}
     };
 
     // **************** another piece of bullshit  **********************
