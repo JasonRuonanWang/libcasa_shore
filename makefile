@@ -1,5 +1,5 @@
 TARGET=libcasa_tables.so
-SRC=casaBullshit.cc casaShore.cc
+SRC=casaShore.cc
 
 PREFIX=$(CASACORE_HOME)
 
@@ -9,18 +9,13 @@ ifdef CASACORE_HOME
 	rm -rf $(CASACORE_HOME)/lib/libcasa_tables* 
 	rm -rf $(CASACORE_HOME)/lib/lib*stman* 
 	cp $(TARGET) $(CASACORE_HOME)/lib/libcasa_tables.so
-	cp -r casacore $(CASACORE_HOME)/include
+	cp -r casaBullshit/tables $(CASACORE_HOME)/include/casacore
 endif
 
-install:$(TARGET)
-ifdef PREFIX
-	cp $(TARGET) $(PREFIX)/lib
-	cp -r casacore $(PREFIX)/include
-endif
 
 $(TARGET):$(SRC)
-	cp casaShore.h casacore/tables/
-	c++ casaBullshit.cc casaShore.cc --shared -o $(TARGET)
+	cp casaShore.h casaBullshit/tables/
+	c++ $(SRC) --shared -o $(TARGET)
 
 clean:
 	rm -rf $(TARGET)
