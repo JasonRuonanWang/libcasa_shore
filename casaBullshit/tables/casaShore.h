@@ -10,22 +10,29 @@ namespace casacore{
 
     class SetupNewTable;
     class DataManager;
+    class TableDesc;
 
     template<class T> class ScalarColumn{
         public:
-            ScalarColumn(casa::Table const&, casa::String const&){}
+            ScalarColumn(Table const& tab, String const& name);
+            ScalarColumn(){}
+            void put(uInt rowid, T data);
+            void attach(casa::Table const&, casa::String const&){}
             T operator() (uInt rownr) {T value; get(rownr, value); return value;}
             bool isDefined(uInt){return true;}
             bool hasContent(uInt){return true;}
-            void put(uInt rowid, T data){}
             void putColumn(Vector<T> data){}
             void get(uInt,T&){}
             Vector<T> getColumn(){Vector<T> tmp; return tmp;}
+            String doid;
+            String columnName;
     };
 
     template<class T> class ArrayColumn{
         public:
             ArrayColumn(casa::Table const&, casa::String const&){}
+            ArrayColumn(){}
+            void attach(casa::Table const&, casa::String const&){}
             Array<T> operator() (uInt rownr) {Array<T> value; get (rownr, value); return value;}
             bool isDefined(uInt){return true;}
             bool hasContent(uInt){return true;}
@@ -37,15 +44,34 @@ namespace casacore{
             void getSlice(uInt, Slicer, Array<T>){}
             Array<T> getColumn(){Array<T> tmp; return tmp;}
             Array<T> getColumn(Slicer){Array<T> tmp; return tmp;}
+            String doid;
+            String columnName;
+    };
+
+    class BaseColumnDesc{
+        public:
+            BaseColumnDesc(){}
+            int dataType(){return 0;}
+    };
+
+    class TableDesc {
+        public:
+            enum TDOption {Old=1, New, NewNoReplace, Scratch, Update, Delete};
+            TableDesc(){}
+            TableDesc(const String& type, const String& version, TDOption = Old){}
+            void addColumn (BaseColumnDesc column){}
+            string comment(){string tmp; return tmp;}
+            Vector<String> columnNames() const{Vector<String> tmp; return tmp;}
+            uInt ncolumn() const {return 0;}
+            BaseColumnDesc columnDesc(uInt) const{BaseColumnDesc tmp; return tmp;}
+            bool isColumn(String) const {return true;}
     };
 
     class Table {
         public:
             enum TableOption {Old=1, New, NewNoReplace, Scratch, Update, Delete};
             enum EndianFormat {LittleEndian, LocalEndian};
-            Table(SetupNewTable &newtab, uInt nrrows, bool a, EndianFormat b){}
-            Table(SetupNewTable &newtab, uInt nrrows){}
-            Table(SetupNewTable &newtab){}
+            Table(SetupNewTable &newtab, uInt nrrows = 0, bool a=true, EndianFormat b=LocalEndian);
             Table(string,TableOption){}
             Table(string){}
             Table(){}
@@ -55,11 +81,10 @@ namespace casacore{
             EndianFormat endianFormat(){return LocalEndian;}
             void removeRow(uInt){}
             void removeRow(Vector<uInt>){}
-    };
-
-    class BaseColumnDesc{
-        public:
-            BaseColumnDesc(){}
+            const TableDesc tableDesc() const{TableDesc *tmp = new TableDesc(); return *tmp;}
+            void removeColumn(string){}
+            void addColumn (BaseColumnDesc column){}
+            string doid;
     };
 
     template<class T> class ScalarColumnDesc : public BaseColumnDesc {
@@ -83,26 +108,21 @@ namespace casacore{
             void setMaxLength(int){}
     };
 
-    class TableDesc {
-        public:
-            enum TDOption {Old=1, New, NewNoReplace, Scratch, Update, Delete};
-            TableDesc(const String& type, const String& version, TDOption = Old){}
-            void addColumn (BaseColumnDesc column){}
-            string comment(){string tmp; return tmp;}
-    };
 
     typedef DataManager *(* DataManagerCtor )(const String &dataManagerType, const Record &spec);
     class DataManager{
         public:
             static void registerCtor(string,DataManagerCtor){}
+            static DataManager* makeObject(const String&, const Record&){return 0;}
     };
 
     class SetupNewTable {
         public:
-            SetupNewTable(casa::String const&, casa::TableDesc const&, casa::Table::TableOption){}
+            SetupNewTable(casa::String const&, casa::TableDesc const&, casa::Table::TableOption);
             void bindAll(DataManager){}
             void bindColumn(string,DataManager){}
             void setShapeColumn(string, IPosition){}
+            string doid;
     };
 
     class StManAipsIO: public DataManager{
@@ -111,13 +131,13 @@ namespace casacore{
     class StandardStMan: public DataManager{
         public:
             StandardStMan(int){}
+            StandardStMan(string,int){}
     };
 
     class IncrementalStMan: public DataManager{
         public:
             IncrementalStMan(int,bool){}
             IncrementalStMan(string,int,bool){}
-            static DataManager* makeObject(const String&, const Record&){return 0;}
     };
 
     class TSMShape{
@@ -125,13 +145,29 @@ namespace casacore{
             TSMShape(IPosition){}
     };
 
-    class ROIncrementalStManAccessor{
+    class RODataManagerAccessor{
         public:
-            ROIncrementalStManAccessor(Table,string){}
-            void setCacheSize(int){}
+            RODataManagerAccessor(){}
+            RODataManagerAccessor(Table,string){}
             void showCacheStatistics(std::ostream & )const{}
+            void showBaseStatistics(std::ostream & )const{}
+            void showIndexStatistics(std::ostream & )const{}
+            void setCacheSize(int){}
             void clearCache(){}
     };
+
+    class ROIncrementalStManAccessor : public RODataManagerAccessor{
+        public:
+            ROIncrementalStManAccessor(Table,string){}
+    };
+
+    class ROStandardStManAccessor : public RODataManagerAccessor{
+        public:
+            ROStandardStManAccessor(Table,string){}
+    };
+
+
 }
 
+#include "casaShore.tcc"
 #endif
