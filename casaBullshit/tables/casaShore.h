@@ -5,6 +5,9 @@
 #include <casacore/casa/Arrays/Slicer.h>
 #include <casacore/casa/Arrays/IPosition.h>
 #include <casacore/casa/Containers/Record.h>
+extern "C"{
+#include <shoreClient.h>
+}
 
 namespace casacore{
 
@@ -166,8 +169,20 @@ namespace casacore{
             ROStandardStManAccessor(Table,string){}
     };
 
+    // *********************************************************************
+
+    template<class T> ScalarColumn<T>::ScalarColumn(Table const& tab, String const& name){
+        doid = tab.doid;
+        columnName = name;
+    }
+
+    template<class T> void ScalarColumn<T>::put(uInt rowid, T data){
+        cout << "Table Data Object ID: " << doid << ", Column: " << columnName << ", put Row " << rowid << ", Data " <<  data << endl;
+
+        shorePut(doid.c_str(), 0, 0, 0);
+    }
+
 
 }
 
-#include "casaShore.tcc"
 #endif

@@ -14,7 +14,7 @@ endif
 
 
 $(TARGET):$(SRC)
-	cp casaShore.h casaShore.tcc casaBullshit/tables/
+	cp casaShore.h casaBullshit/tables/
 	c++ $(SRC) --shared -o $(TARGET)
 
 clean:
