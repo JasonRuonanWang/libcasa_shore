@@ -177,9 +177,9 @@ namespace casacore{
     }
 
     template<class T> void ScalarColumn<T>::put(uInt rowid, T data){
-        cout << "Table Data Object ID: " << doid << ", Column: " << columnName << ", put Row " << rowid << ", Data " <<  data << endl;
+//        cout << "Table Data Object ID: " << doid << ", Column: " << columnName << ", put Row " << rowid << ", Data " <<  data << endl;
 
-        shorePut(doid.c_str(), 0, 0, 0);
+        shorePut(doid.c_str(), columnName.c_str(), rowid, &data);
     }
 
 
