@@ -15,7 +15,7 @@ endif
 
 $(TARGET):$(SRC)
 	cp casaShore.h casaBullshit/tables/
-	c++ $(SRC) --shared -o $(TARGET)
+	c++ -fPIC $(SRC) --shared -o $(TARGET)
 
 clean:
 	rm -rf $(TARGET)
