@@ -73,6 +73,7 @@ namespace casacore{
         public:
             enum TDOption {Old=1, New, NewNoReplace, Scratch, Update, Delete};
             TableDesc(){}
+            TableDesc(const String &type, TDOption=Old);
             TableDesc(const String& type, const String& version, TDOption = Old){}
             void addColumn (BaseColumnDesc column){}
             string comment(){string tmp; return tmp;}
@@ -181,106 +182,6 @@ namespace casacore{
             ROStandardStManAccessor(Table,string){}
     };
 
-    // *********************************************************************
-    // for non-removal version
-    class ColumnSet{
-    };
-    class RefRows{
-    };
-    class BaseColumn{
-        public:
-            BaseColumn();
-            BaseColumn(const BaseColumnDesc *);
-            void putArrayColumn (const void*);
-            void putColumnSlice (const Slicer &, const void *);
-            void putArrayColumnCells (const RefRows &, const void *);
-            void putColumnSliceCells (const RefRows &, const Slicer &, const void *);
-            void putSlice (uInt, const Slicer &, const void *);
-            void setShape (uInt, const IPosition &);
-            void setShape (uInt, const IPosition &, const IPosition &);
-            uInt ndimColumn () const;
-            IPosition shapeColumn () const;
-            Bool canAccessSlice (Bool &reask) const;
-            Bool canChangeShape () const;
-            void getArrayColumn (void *dataPtr) const;
-            void getColumnSlice (const Slicer &, void *dataPtr) const;
-            void getArrayColumnCells (const RefRows &rownrs, void *dataPtr) const;
-            void getColumnSliceCells (const RefRows &rownrs, const Slicer &, void *dataPtr) const;
-            Bool canAccessArrayColumn (Bool &reask) const;
-            Bool canAccessColumnSlice (Bool &reask) const;
-            Bool canAccessArrayColumnCells (Bool &reask) const;
-            uInt ndim (uInt rownr) const;
-            IPosition shape (uInt rownr) const;
-            void getSlice (uInt rownr, const Slicer &, void *dataPtr) const;
-    };
-    class PlainColumn : public BaseColumn{
-        public:
-            PlainColumn (const BaseColumnDesc *, ColumnSet *);
-            ~PlainColumn();
-            void keywordSet ();
-            void rwKeywordSet ();
-            void columnCache ();
-            void setShapeColumn (const IPosition &);
-            void setMaximumCacheSize (uInt);
-            void bind (DataManager *);
-            Bool isWritable () const;
-            uInt nrow () const;
-            Bool isBound () const;
-            Bool isStored () const;
-    };
-    class TableInvDT : public AipsError{
-        public:
-            TableInvDT (Category c=CONFORMANCE);
-            ~TableInvDT () throw ();
-    };
-    class ConcatColumn : public BaseColumn{
-        public:
-            void initialize (uInt, uInt);
-            void keywordSet ();
-            void rwKeywordSet ();
-            void columnCache ();
-            void freeIterBuf (void *&, void *&);
-            void allocIterBuf (void *&, void *&, CountedPtr<BaseCompare> &);
-            void putArrayColumn (const void*);
-            void putColumnSlice (const Slicer &, const void *);
-            void putArrayColumnCells (const RefRows &, const void *);
-            void putColumnSliceCells (const RefRows &, const Slicer &, const void *);
-            void putSlice (uInt, const Slicer &, const void *);
-            void put (uInt, const void *);
-            void setMaximumCacheSize (uInt);
-            void setShape (uInt, const IPosition &);
-            void setShape (uInt, const IPosition &, const IPosition &);
-            Bool isWritable () const;
-            uInt ndimColumn () const;
-            IPosition shapeColumn () const;
-            Bool canAccessSlice (Bool &reask) const;
-            Bool canChangeShape () const;
-            void getArrayColumnCells (const RefRows &rownrs, void *dataPtr) const;
-            void getArrayColumn (void *dataPtr) const;
-            void getColumnSlice (const Slicer &, void *dataPtr) const;
-            void getColumnSliceCells (const RefRows &rownrs, const Slicer &, void *dataPtr) const;
-            Bool canAccessArrayColumn (Bool &reask) const;
-            Bool canAccessColumnSlice (Bool &reask) const;
-            Bool canAccessArrayColumnCells (Bool &reask) const;
-            Bool canAccessScalarColumn (Bool &reask) const;
-            Bool canAccessScalarColumnCells (Bool &reask) const;
-            void get (uInt rownr, void *dataPtr) const;
-            uInt ndim (uInt rownr) const;
-            uInt nrow () const;
-            IPosition shape (uInt rownr) const;
-            void getSlice (uInt rownr, const Slicer &, void *dataPtr) const;
-            Bool isStored () const;
-            Bool isDefined (uInt rownr) const;
-    };
-    class TableConformanceError :public AipsError{
-        public:
-            ~TableConformanceError () throw ();
-    };
-    class TableArrayConformanceError :public AipsError{
-        public:
-            ~TableArrayConformanceError () throw ();
-    };
-    // *********************************************************************
 
     template<class T> ScalarColumn<T>::ScalarColumn(Table const& tab, String const& name){
         doid = tab.doid;
