@@ -2,8 +2,11 @@ VERSION_MAJOR=2
 VERSION_MIDDLE=0
 VERSION_MINOR=1
 
-ifdef __APPLE__
-	TARGET_PREFIX=libcasa_tables
+SRC=casaShore.cc
+TARGET_PREFIX=libcasa_tables
+
+OS := $(shell uname)
+ifeq ($(OS), Darwin)
 	TARGET_SUFFIX=dylib
 	TARGET=$(TARGET_PREFIX).$(TARGET_SUFFIX)
 	TARGET_MAJOR=$(TARGET_PREFIX).$(VERSION_MAJOR).$(TARGET_SUFFIX)
@@ -20,10 +23,6 @@ endif
 
 
 
-SRC=casaShore.cc
-
-PREFIX=$(CASACORE_HOME)
-
 crack:$(TARGET)
 ifdef CASACORE_HOME
 	rm -rf $(CASACORE_HOME)/include/casacore/tables
@@ -39,7 +38,11 @@ endif
 
 $(TARGET):$(SRC)
 	cp casaShore.h casaBullshit/tables/
+ifeq ($(OS), Darwin)
+	c++ -fPIC -lcasa_casa $(SRC) --shared -o $(TARGET_MINOR) -compatibility_version $(VERSION_MAJOR).0.0 -current_version $(VERSION_MAJOR).$(VERSION_MIDDLE).$(VERSION_MINOR)
+else
 	c++ -fPIC -lcasa_casa $(SRC) --shared -o $(TARGET_MINOR) -Wl,-soname,$(TARGET_MAJOR)
+endif
 
 clean:
 	rm -rf $(TARGET_MINOR)
