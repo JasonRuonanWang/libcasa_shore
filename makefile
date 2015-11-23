@@ -1,6 +1,6 @@
-VERSION_MAJOR=2
-VERSION_MIDDLE=0
-VERSION_MINOR=1
+VERSION_MAJOR=916
+VERSION_MIDDLE=229
+VERSION_MINOR=141
 
 SRC=casaShore.cc
 TARGET_PREFIX=libcasa_tables
@@ -39,12 +39,12 @@ endif
 $(TARGET):$(SRC)
 	cp casaShore.h casaBullshit/tables/
 ifeq ($(OS), Darwin)
-	c++ -fPIC -lcasa_casa $(SRC) --shared -o $(TARGET_MINOR) -compatibility_version $(VERSION_MAJOR).0.0 -current_version $(VERSION_MAJOR).$(VERSION_MIDDLE).$(VERSION_MINOR)
+	c++ -fPIC -lcasa_casa -lShoreClient $(SRC) --shared -o $(TARGET_MINOR) -compatibility_version $(VERSION_MAJOR).0.0 -current_version $(VERSION_MAJOR).$(VERSION_MIDDLE).$(VERSION_MINOR)
 else
-	c++ -fPIC -lcasa_casa $(SRC) --shared -o $(TARGET_MINOR) -Wl,-soname,$(TARGET_MAJOR)
+	c++ -fPIC -lcasa_casa -lShoreClient $(SRC) --shared -o $(TARGET_MINOR) -Wl,-soname,$(TARGET_MAJOR)
 endif
 
 clean:
-	rm -rf $(TARGET_MINOR)
+	rm -rf *.dylib *.so
 
 re:clean crack

@@ -7,9 +7,6 @@
 #include <casacore/casa/Containers/Record.h>
 #include <casacore/casa/Utilities/Compare.h>
 #include <casacore/casa/Exceptions/Error.h>
-extern "C"{
-#include <shoreClient.h>
-}
 
 namespace casacore{
 
@@ -31,6 +28,7 @@ namespace casacore{
             Vector<T> getColumn(){Vector<T> tmp; return tmp;}
             String doid;
             String columnName;
+            int dtype;
     };
 
     template<class T> class ArrayColumn{
@@ -51,6 +49,7 @@ namespace casacore{
             Array<T> getColumn(Slicer){Array<T> tmp; return tmp;}
             String doid;
             String columnName;
+            int dtype;
     };
 
     class ColumnDescSet{
@@ -181,20 +180,6 @@ namespace casacore{
         public:
             ROStandardStManAccessor(Table,string){}
     };
-
-
-    template<class T> ScalarColumn<T>::ScalarColumn(Table const& tab, String const& name){
-        doid = tab.doid;
-        columnName = name;
-    }
-
-    template<class T> void ScalarColumn<T>::put(uInt rowid, T data){
-        unsigned int dim[3];
-        dim[0]=2;
-        dim[1]=59;
-        dim[2]=19;
-        shorePut(doid.c_str(), columnName.c_str(), rowid, NULL, &data);
-    }
 
 }
 
