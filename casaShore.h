@@ -33,7 +33,7 @@ namespace casacore{
 
     template<class T> class ArrayColumn{
         public:
-            ArrayColumn(casa::Table const&, casa::String const&){}
+            ArrayColumn(casa::Table const&, casa::String const&);
             ArrayColumn(){}
             void attach(casa::Table const&, casa::String const&){}
             Array<T> operator() (uInt rownr) {Array<T> value; get (rownr, value); return value;}
@@ -41,7 +41,7 @@ namespace casacore{
             bool hasContent(uInt){return true;}
             void get(uInt,Array<T>){}
             void setShape(uInt,IPosition){}
-            void put(uInt rowid, Array<T> data){}
+            void put(uInt rowid, Array<T> data);
             void putSlice(uInt rowid, Slicer, Array<T> data){}
             Array<T> getSlice(uInt, Slicer){Array<T> tmp; return tmp;}
             void getSlice(uInt, Slicer, Array<T>){}
@@ -50,6 +50,8 @@ namespace casacore{
             String doid;
             String columnName;
             int dtype;
+            unsigned int shapePtr[11];
+            IPosition shape;
     };
 
     class ColumnDescSet{
