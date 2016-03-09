@@ -22,6 +22,7 @@ else
 endif
 
 
+re:clean crack
 
 crack:$(TARGET)
 ifdef CASACORE_HOME
@@ -47,4 +48,3 @@ endif
 clean:
 	rm -rf *.dylib *.so
 
-re:clean crack

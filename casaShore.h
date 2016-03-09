@@ -8,51 +8,15 @@
 #include <casacore/casa/Utilities/Compare.h>
 #include <casacore/casa/Exceptions/Error.h>
 
+extern "C"{
+#include <shoreClient.h>
+}
+
 namespace casacore{
 
     class SetupNewTable;
     class DataManager;
     class TableDesc;
-
-    template<class T> class ScalarColumn{
-        public:
-            ScalarColumn(Table const& tab, String const& name);
-            ScalarColumn(){}
-            void put(uInt rowid, T data);
-            void attach(casa::Table const&, casa::String const&){}
-            T operator() (uInt rownr) {T value; get(rownr, value); return value;}
-            bool isDefined(uInt){return true;}
-            bool hasContent(uInt){return true;}
-            void putColumn(Vector<T> data){}
-            void get(uInt,T&){}
-            Vector<T> getColumn(){Vector<T> tmp; return tmp;}
-            String doid;
-            String columnName;
-            int dtype;
-    };
-
-    template<class T> class ArrayColumn{
-        public:
-            ArrayColumn(casa::Table const&, casa::String const&);
-            ArrayColumn(){}
-            void attach(casa::Table const&, casa::String const&){}
-            Array<T> operator() (uInt rownr) {Array<T> value; get (rownr, value); return value;}
-            bool isDefined(uInt){return true;}
-            bool hasContent(uInt){return true;}
-            void get(uInt,Array<T>){}
-            void setShape(uInt,IPosition){}
-            void put(uInt rowid, Array<T> data);
-            void putSlice(uInt rowid, Slicer, Array<T> data){}
-            Array<T> getSlice(uInt, Slicer){Array<T> tmp; return tmp;}
-            void getSlice(uInt, Slicer, Array<T>){}
-            Array<T> getColumn(){Array<T> tmp; return tmp;}
-            Array<T> getColumn(Slicer){Array<T> tmp; return tmp;}
-            String doid;
-            String columnName;
-            int dtype;
-            unsigned int shapePtr[11];
-            IPosition shape;
-    };
 
     class ColumnDescSet{
     };
@@ -69,7 +33,6 @@ namespace casacore{
             void checkRename (const ColumnDescSet &cds, const String &newName) const;
             void checkAdd (const ColumnDescSet &cds) const;
     };
-
     class TableDesc {
         public:
             enum TDOption {Old=1, New, NewNoReplace, Scratch, Update, Delete};
@@ -90,7 +53,7 @@ namespace casacore{
             enum EndianFormat {LittleEndian, LocalEndian};
             Table(SetupNewTable &newtab, uInt nrrows = 0, bool a=true, EndianFormat b=LocalEndian);
             Table(string,TableOption){}
-            Table(string){}
+            Table(string);
             Table(){}
             uInt nrow(){return 0;}
             void addRow(){}
@@ -102,6 +65,57 @@ namespace casacore{
             void removeColumn(string){}
             void addColumn (BaseColumnDesc column){}
             string doid;
+    };
+    template<class T> class ScalarColumn{
+        public:
+            ScalarColumn(Table const& tab, String const& name);
+            ScalarColumn(){}
+            void put(uInt rowid, T data){
+                shorePut(doid.c_str(), columnName.c_str(), rowid, 1, 0, dtype, &data);
+            }
+            void attach(casa::Table const&, casa::String const&){}
+            T operator() (uInt rownr) {T value; get(rownr, value); return value;}
+            bool isDefined(uInt){return true;}
+            bool hasContent(uInt){return true;}
+            void putColumn(Vector<T> data){}
+            void get(uInt,T&){}
+            Vector<T> getColumn(){Vector<T> tmp; return tmp;}
+            String doid;
+            String columnName;
+            int dtype;
+    };
+
+    template<class T> class ArrayColumn{
+        public:
+            String doid;
+            String columnName;
+            ArrayColumn(casa::Table const& tab, casa::String const& name);
+            ArrayColumn(){}
+            void attach(casa::Table const&, casa::String const&){}
+            Array<T> operator() (uInt rownr) {Array<T> value; get (rownr, value); return value;}
+            bool isDefined(uInt){return true;}
+            bool hasContent(uInt){return true;}
+            void get(uInt,Array<T>){}
+            Array<T> get(uInt rowid);
+            void setShape(uInt,IPosition){}
+            void put(uInt rowid, Array<T> data);
+            void putSlice(uInt rowid, Slicer, Array<T> data){}
+            Array<T> getSlice(uInt, Slicer){Array<T> tmp; return tmp;}
+            void getSlice(uInt, Slicer, Array<T>){}
+            Array<T> getColumn(){Array<T> tmp; return tmp;}
+            Array<T> getColumn(Slicer){Array<T> tmp; return tmp;}
+            int dtype;
+            unsigned int shapePtr[11];
+            IPosition shape;
+    };
+
+    template<class T> class ROArrayColumn: public ArrayColumn<T>{
+        public:
+            String doid;
+            String columnName;
+            ROArrayColumn(casa::Table const& tab, casa::String const& name)
+                :ArrayColumn<T> (tab, name)
+            {}
     };
 
     template<class T> class ScalarColumnDesc : public BaseColumnDesc {

@@ -1,7 +1,4 @@
 #include "casaShore.h"
-extern "C"{
-#include <shoreClient.h>
-}
 
 namespace casacore{
 
@@ -11,6 +8,9 @@ namespace casacore{
 
     Table::Table(SetupNewTable &newtab, uInt nrrows, bool a, EndianFormat b){
         doid = newtab.doid;
+    }
+    Table::Table(string filename){
+        doid = filename;
     }
 
     template<> ScalarColumn<bool>::ScalarColumn(Table const& tab, String const& name){
@@ -57,41 +57,6 @@ namespace casacore{
         dtype = shoreTypeDComplex;
         doid = tab.doid; columnName = name;
     }
-
-    template<> void ScalarColumn<bool>::put(uInt rowid, bool data){
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 0, dtype, &data);
-    }
-    template<> void ScalarColumn<char>::put(uInt rowid, char data){
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 0, dtype, &data);
-    }
-    template<> void ScalarColumn<unsigned char>::put(uInt rowid, unsigned char data){
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 0, dtype, &data);
-    }
-    template<> void ScalarColumn<short>::put(uInt rowid, short data){
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 0, dtype, &data);
-    }
-    template<> void ScalarColumn<unsigned short>::put(uInt rowid, unsigned short data){
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 0, dtype, &data);
-    }
-    template<> void ScalarColumn<int>::put(uInt rowid, int data){
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 0, dtype, &data);
-    }
-    template<> void ScalarColumn<unsigned int>::put(uInt rowid, unsigned int data){
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 0, dtype, &data);
-    }
-    template<> void ScalarColumn<float>::put(uInt rowid, float data){
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 0, dtype, &data);
-    }
-    template<> void ScalarColumn<double>::put(uInt rowid, double data){
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 0, dtype, &data);
-    }
-    template<> void ScalarColumn<Complex>::put(uInt rowid, Complex data){
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 0, dtype, &data);
-    }
-    template<> void ScalarColumn<DComplex>::put(uInt rowid, DComplex data){
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 0, dtype, &data);
-    }
-
 
     template<> ArrayColumn<bool>::ArrayColumn(Table const& tab, String const& name){
         dtype = shoreTypeBool;
@@ -146,7 +111,7 @@ namespace casacore{
         }
         bool deleteIt;
         const bool *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, shapePtr, dtype, dataPtr);
+        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
         data.freeStorage(dataPtr, deleteIt);
     }
     template<> void ArrayColumn<char>::put(uInt rowid, const Array<char> data){
@@ -157,7 +122,7 @@ namespace casacore{
         }
         bool deleteIt;
         const char *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, shapePtr, dtype, dataPtr);
+        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
         data.freeStorage(dataPtr, deleteIt);
     }
     template<> void ArrayColumn<unsigned char>::put(uInt rowid, const Array<unsigned char> data){
@@ -168,7 +133,7 @@ namespace casacore{
         }
         bool deleteIt;
         const unsigned char *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, shapePtr, dtype, dataPtr);
+        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
         data.freeStorage(dataPtr, deleteIt);
     }
     template<> void ArrayColumn<short>::put(uInt rowid, const Array<short> data){
@@ -179,7 +144,7 @@ namespace casacore{
         }
         bool deleteIt;
         const short *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, shapePtr, dtype, dataPtr);
+        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
         data.freeStorage(dataPtr, deleteIt);
     }
     template<> void ArrayColumn<unsigned short>::put(uInt rowid, const Array<unsigned short> data){
@@ -190,7 +155,7 @@ namespace casacore{
         }
         bool deleteIt;
         const unsigned short *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, shapePtr, dtype, dataPtr);
+        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
         data.freeStorage(dataPtr, deleteIt);
     }
     template<> void ArrayColumn<int>::put(uInt rowid, const Array<int> data){
@@ -201,7 +166,7 @@ namespace casacore{
         }
         bool deleteIt;
         const int *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, shapePtr, dtype, dataPtr);
+        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
         data.freeStorage(dataPtr, deleteIt);
     }
     template<> void ArrayColumn<unsigned int>::put(uInt rowid, const Array<unsigned int> data){
@@ -212,7 +177,7 @@ namespace casacore{
         }
         bool deleteIt;
         const unsigned int *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, shapePtr, dtype, dataPtr);
+        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
         data.freeStorage(dataPtr, deleteIt);
     }
     template<> void ArrayColumn<float>::put(uInt rowid, const Array<float> data){
@@ -223,7 +188,7 @@ namespace casacore{
         }
         bool deleteIt;
         const float *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, shapePtr, dtype, dataPtr);
+        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
         data.freeStorage(dataPtr, deleteIt);
     }
     template<> void ArrayColumn<double>::put(uInt rowid, const Array<double> data){
@@ -234,7 +199,7 @@ namespace casacore{
         }
         bool deleteIt;
         const double *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, shapePtr, dtype, dataPtr);
+        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
         data.freeStorage(dataPtr, deleteIt);
     }
     template<> void ArrayColumn<Complex>::put(uInt rowid, const Array<Complex> data){
@@ -245,7 +210,7 @@ namespace casacore{
         }
         bool deleteIt;
         const Complex *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, shapePtr, dtype, dataPtr);
+        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
         data.freeStorage(dataPtr, deleteIt);
     }
     template<> void ArrayColumn<DComplex>::put(uInt rowid, const Array<DComplex> data){
@@ -256,9 +221,35 @@ namespace casacore{
         }
         bool deleteIt;
         const DComplex *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, shapePtr, dtype, dataPtr);
+        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
         data.freeStorage(dataPtr, deleteIt);
     }
 
+    template<> Array<bool> ArrayColumn<bool>::get(uInt rowid){
+        unsigned int shape[10];
+        int dtype;
+        void *data;
+        shoreQuery(doid.c_str(), columnName.c_str(), rowid, shape, &dtype);
+        IPosition shape_i(shape[0]);
+        for (int i=0; i<shape[0]; i++){
+            shape_i[i] = shape[i+1];
+        }
+        Array<bool> arr(shape_i);
+        return arr;
+    }
+    template<> Array<unsigned char> ArrayColumn<unsigned char>::get(uInt rowid){
+        unsigned int shape[10];
+        int dtype;
+        void *data;
+        shoreQuery(doid.c_str(), columnName.c_str(), rowid, shape, &dtype);
+        IPosition shape_i(shape[0]);
+        for (int i=0; i<shape[0]; i++){
+            shape_i[i] = shape[i+1];
+        }
+        Array<unsigned char> arr(shape_i);
+        return arr;
+    }
+
 }
+
 
