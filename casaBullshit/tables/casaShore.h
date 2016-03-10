@@ -66,12 +66,22 @@ namespace casacore{
             void addColumn (BaseColumnDesc column){}
             string doid;
     };
-    template<class T> class ScalarColumn{
+
+    template<class T> class TableColumn{
         public:
-            ScalarColumn(Table const& tab, String const& name);
+            TableColumn(Table const&, String const&);
+            TableColumn(){}
+            String doid;
+            String columnName;
+            int dtype;
+    };
+
+    template<class T> class ScalarColumn : public TableColumn<T>{
+        public:
+            ScalarColumn(Table const& tab, String const& name) :TableColumn<T> (tab, name){}
             ScalarColumn(){}
             void put(uInt rowid, T data){
-                shorePut(doid.c_str(), columnName.c_str(), rowid, 1, 0, dtype, &data);
+                shorePut(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, 0, TableColumn<T>::dtype, &data);
             }
             void attach(casa::Table const&, casa::String const&){}
             T operator() (uInt rownr) {T value; get(rownr, value); return value;}
@@ -80,16 +90,11 @@ namespace casacore{
             void putColumn(Vector<T> data){}
             void get(uInt,T&){}
             Vector<T> getColumn(){Vector<T> tmp; return tmp;}
-            String doid;
-            String columnName;
-            int dtype;
     };
 
-    template<class T> class ArrayColumn{
+    template<class T> class ArrayColumn : public TableColumn<T>{
         public:
-            String doid;
-            String columnName;
-            ArrayColumn(casa::Table const& tab, casa::String const& name);
+            ArrayColumn(casa::Table const& tab, casa::String const& name) :TableColumn<T> (tab, name){}
             ArrayColumn(){}
             void attach(casa::Table const&, casa::String const&){}
             Array<T> operator() (uInt rownr) {Array<T> value; get (rownr, value); return value;}
@@ -100,7 +105,7 @@ namespace casacore{
                 unsigned int shape[10];
                 int dtype;
                 T *data;
-                shoreQuery(doid.c_str(), columnName.c_str(), rowid, shape, &dtype);
+                shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, shape, &(TableColumn<T>::dtype));
                 IPosition shape_i(shape[0]);
                 for (int i=0; i<shape[0]; i++){
                     shape_i[i] = shape[i+1];
@@ -108,7 +113,7 @@ namespace casacore{
                 Array<T> arr(shape_i);
                 Bool deleteIt;
                 data = arr.getStorage (deleteIt);
-                shoreGet(doid.c_str(), columnName.c_str(), rowid, 1, shape, &dtype, data);
+                shoreGet(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, shape, &(TableColumn<T>::dtype), data);
                 arr.putStorage (data, deleteIt);
                 return arr;
             }
@@ -119,18 +124,13 @@ namespace casacore{
             void getSlice(uInt, Slicer, Array<T>){}
             Array<T> getColumn(){Array<T> tmp; return tmp;}
             Array<T> getColumn(Slicer){Array<T> tmp; return tmp;}
-            int dtype;
             unsigned int shapePtr[11];
             IPosition shape;
     };
 
     template<class T> class ROArrayColumn: public ArrayColumn<T>{
         public:
-            String doid;
-            String columnName;
-            ROArrayColumn(casa::Table const& tab, casa::String const& name)
-                :ArrayColumn<T> (tab, name)
-            {}
+            ROArrayColumn(casa::Table const& tab, casa::String const& name) :ArrayColumn<T> (tab, name){}
     };
 
     template<class T> class ScalarColumnDesc : public BaseColumnDesc {
