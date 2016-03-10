@@ -96,7 +96,22 @@ namespace casacore{
             bool isDefined(uInt){return true;}
             bool hasContent(uInt){return true;}
             void get(uInt,Array<T>){}
-            Array<T> get(uInt rowid);
+            Array<T> get(uInt rowid){
+                unsigned int shape[10];
+                int dtype;
+                T *data;
+                shoreQuery(doid.c_str(), columnName.c_str(), rowid, shape, &dtype);
+                IPosition shape_i(shape[0]);
+                for (int i=0; i<shape[0]; i++){
+                    shape_i[i] = shape[i+1];
+                }
+                Array<T> arr(shape_i);
+                Bool deleteIt;
+                data = arr.getStorage (deleteIt);
+                shoreGet(doid.c_str(), columnName.c_str(), rowid, 1, shape, &dtype, data);
+                arr.putStorage (data, deleteIt);
+                return arr;
+            }
             void setShape(uInt,IPosition){}
             void put(uInt rowid, Array<T> data);
             void putSlice(uInt rowid, Slicer, Array<T> data){}

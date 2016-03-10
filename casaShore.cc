@@ -225,30 +225,7 @@ namespace casacore{
         data.freeStorage(dataPtr, deleteIt);
     }
 
-    template<> Array<bool> ArrayColumn<bool>::get(uInt rowid){
-        unsigned int shape[10];
-        int dtype;
-        void *data;
-        shoreQuery(doid.c_str(), columnName.c_str(), rowid, shape, &dtype);
-        IPosition shape_i(shape[0]);
-        for (int i=0; i<shape[0]; i++){
-            shape_i[i] = shape[i+1];
-        }
-        Array<bool> arr(shape_i);
-        return arr;
-    }
-    template<> Array<unsigned char> ArrayColumn<unsigned char>::get(uInt rowid){
-        unsigned int shape[10];
-        int dtype;
-        void *data;
-        shoreQuery(doid.c_str(), columnName.c_str(), rowid, shape, &dtype);
-        IPosition shape_i(shape[0]);
-        for (int i=0; i<shape[0]; i++){
-            shape_i[i] = shape[i+1];
-        }
-        Array<unsigned char> arr(shape_i);
-        return arr;
-    }
+
 
 }
 
