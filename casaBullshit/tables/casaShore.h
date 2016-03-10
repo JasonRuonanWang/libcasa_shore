@@ -78,22 +78,54 @@ namespace casacore{
 
     template<class T> class ScalarColumn : public TableColumn<T>{
         public:
+            void put(uInt rowid, T data){
+                shapePtr[0]=1;
+                shapePtr[1]=1;
+                shorePut(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, shapePtr, TableColumn<T>::dtype, &data);
+            }
+            /*
+            T get(uInt rowid){
+
+            }
+            */
+            void get(uInt rowid, T& data){}
             ScalarColumn(Table const& tab, String const& name) :TableColumn<T> (tab, name){}
             ScalarColumn(){}
-            void put(uInt rowid, T data){
-                shorePut(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, 0, TableColumn<T>::dtype, &data);
-            }
             void attach(casa::Table const&, casa::String const&){}
             T operator() (uInt rownr) {T value; get(rownr, value); return value;}
             bool isDefined(uInt){return true;}
             bool hasContent(uInt){return true;}
             void putColumn(Vector<T> data){}
-            void get(uInt,T&){}
+            unsigned int shapePtr[2];
             Vector<T> getColumn(){Vector<T> tmp; return tmp;}
     };
 
     template<class T> class ArrayColumn : public TableColumn<T>{
         public:
+            void put(uInt rowid, Array<T> data){
+                shapePtr[0] = data.ndim();
+                shape = data.shape();
+                for (unsigned int i=0; i<shapePtr[0]; i++){
+                    shapePtr[i+1] = shape[i];
+                }
+                bool deleteIt;
+                const T *dataPtr = data.getStorage (deleteIt);
+                shorePut(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, shapePtr, TableColumn<T>::dtype, dataPtr);
+                data.freeStorage(dataPtr, deleteIt);
+            }
+            Array<T> get(uInt rowid){
+                shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, shapePtr, &(TableColumn<T>::dtype));
+                IPosition shape_i(shapePtr[0]);
+                for (int i=0; i<shapePtr[0]; i++){
+                    shape_i[i] = shapePtr[i+1];
+                }
+                Bool deleteIt;
+                Array<T> arr(shape_i);
+                T *data = arr.getStorage (deleteIt);
+                shoreGet(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, shapePtr, &(TableColumn<T>::dtype), data);
+                arr.putStorage (data, deleteIt);
+                return arr;
+            }
             ArrayColumn(casa::Table const& tab, casa::String const& name) :TableColumn<T> (tab, name){}
             ArrayColumn(){}
             void attach(casa::Table const&, casa::String const&){}
@@ -101,24 +133,7 @@ namespace casacore{
             bool isDefined(uInt){return true;}
             bool hasContent(uInt){return true;}
             void get(uInt,Array<T>){}
-            Array<T> get(uInt rowid){
-                unsigned int shape[10];
-                int dtype;
-                T *data;
-                shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, shape, &(TableColumn<T>::dtype));
-                IPosition shape_i(shape[0]);
-                for (int i=0; i<shape[0]; i++){
-                    shape_i[i] = shape[i+1];
-                }
-                Array<T> arr(shape_i);
-                Bool deleteIt;
-                data = arr.getStorage (deleteIt);
-                shoreGet(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, shape, &(TableColumn<T>::dtype), data);
-                arr.putStorage (data, deleteIt);
-                return arr;
-            }
             void setShape(uInt,IPosition){}
-            void put(uInt rowid, Array<T> data);
             void putSlice(uInt rowid, Slicer, Array<T> data){}
             Array<T> getSlice(uInt, Slicer){Array<T> tmp; return tmp;}
             void getSlice(uInt, Slicer, Array<T>){}

@@ -9,6 +9,7 @@ namespace casacore{
     Table::Table(SetupNewTable &newtab, uInt nrrows, bool a, EndianFormat b){
         doid = newtab.doid;
     }
+
     Table::Table(string filename){
         doid = filename;
     }
@@ -46,130 +47,6 @@ namespace casacore{
     template<> TableColumn<DComplex>::TableColumn(Table const& tab, String const& name){
         dtype = shoreTypeDComplex; doid = tab.doid; columnName = name;
     }
-
-
-    template<> void ArrayColumn<bool>::put(uInt rowid, const Array<bool> data){
-        shapePtr[0] = data.ndim();
-        shape = data.shape();
-        for (unsigned int i=0; i<shapePtr[0]; i++){
-            shapePtr[i+1] = shape[i];
-        }
-        bool deleteIt;
-        const bool *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
-        data.freeStorage(dataPtr, deleteIt);
-    }
-    template<> void ArrayColumn<char>::put(uInt rowid, const Array<char> data){
-        shapePtr[0] = data.ndim();
-        shape = data.shape();
-        for (unsigned int i=0; i<shapePtr[0]; i++){
-            shapePtr[i+1] = shape[i];
-        }
-        bool deleteIt;
-        const char *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
-        data.freeStorage(dataPtr, deleteIt);
-    }
-    template<> void ArrayColumn<unsigned char>::put(uInt rowid, const Array<unsigned char> data){
-        shapePtr[0] = data.ndim();
-        shape = data.shape();
-        for (unsigned int i=0; i<shapePtr[0]; i++){
-            shapePtr[i+1] = shape[i];
-        }
-        bool deleteIt;
-        const unsigned char *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
-        data.freeStorage(dataPtr, deleteIt);
-    }
-    template<> void ArrayColumn<short>::put(uInt rowid, const Array<short> data){
-        shapePtr[0] = data.ndim();
-        shape = data.shape();
-        for (unsigned int i=0; i<shapePtr[0]; i++){
-            shapePtr[i+1] = shape[i];
-        }
-        bool deleteIt;
-        const short *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
-        data.freeStorage(dataPtr, deleteIt);
-    }
-    template<> void ArrayColumn<unsigned short>::put(uInt rowid, const Array<unsigned short> data){
-        shapePtr[0] = data.ndim();
-        shape = data.shape();
-        for (unsigned int i=0; i<shapePtr[0]; i++){
-            shapePtr[i+1] = shape[i];
-        }
-        bool deleteIt;
-        const unsigned short *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
-        data.freeStorage(dataPtr, deleteIt);
-    }
-    template<> void ArrayColumn<int>::put(uInt rowid, const Array<int> data){
-        shapePtr[0] = data.ndim();
-        shape = data.shape();
-        for (unsigned int i=0; i<shapePtr[0]; i++){
-            shapePtr[i+1] = shape[i];
-        }
-        bool deleteIt;
-        const int *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
-        data.freeStorage(dataPtr, deleteIt);
-    }
-    template<> void ArrayColumn<unsigned int>::put(uInt rowid, const Array<unsigned int> data){
-        shapePtr[0] = data.ndim();
-        shape = data.shape();
-        for (unsigned int i=0; i<shapePtr[0]; i++){
-            shapePtr[i+1] = shape[i];
-        }
-        bool deleteIt;
-        const unsigned int *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
-        data.freeStorage(dataPtr, deleteIt);
-    }
-    template<> void ArrayColumn<float>::put(uInt rowid, const Array<float> data){
-        shapePtr[0] = data.ndim();
-        shape = data.shape();
-        for (unsigned int i=0; i<shapePtr[0]; i++){
-            shapePtr[i+1] = shape[i];
-        }
-        bool deleteIt;
-        const float *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
-        data.freeStorage(dataPtr, deleteIt);
-    }
-    template<> void ArrayColumn<double>::put(uInt rowid, const Array<double> data){
-        shapePtr[0] = data.ndim();
-        shape = data.shape();
-        for (unsigned int i=0; i<shapePtr[0]; i++){
-            shapePtr[i+1] = shape[i];
-        }
-        bool deleteIt;
-        const double *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
-        data.freeStorage(dataPtr, deleteIt);
-    }
-    template<> void ArrayColumn<Complex>::put(uInt rowid, const Array<Complex> data){
-        shapePtr[0] = data.ndim();
-        shape = data.shape();
-        for (unsigned int i=0; i<shapePtr[0]; i++){
-            shapePtr[i+1] = shape[i];
-        }
-        bool deleteIt;
-        const Complex *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
-        data.freeStorage(dataPtr, deleteIt);
-    }
-    template<> void ArrayColumn<DComplex>::put(uInt rowid, const Array<DComplex> data){
-        shapePtr[0] = data.ndim();
-        shape = data.shape();
-        for (unsigned int i=0; i<shapePtr[0]; i++){
-            shapePtr[i+1] = shape[i];
-        }
-        bool deleteIt;
-        const DComplex *dataPtr = data.getStorage (deleteIt);
-        shorePut(doid.c_str(), columnName.c_str(), rowid, 1, shapePtr, dtype, dataPtr);
-        data.freeStorage(dataPtr, deleteIt);
-    }
-
 
 
 }
