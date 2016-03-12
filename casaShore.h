@@ -3,6 +3,7 @@
 
 #include <casacore/casa/Utilities/DataType.h>
 #include <casacore/casa/Arrays/Slicer.h>
+#include <casacore/casa/Arrays/ArrayMath.h>
 #include <casacore/casa/Arrays/IPosition.h>
 #include <casacore/casa/Containers/Record.h>
 #include <casacore/casa/Utilities/Compare.h>
@@ -83,11 +84,28 @@ namespace casacore{
                 shapePtr[1]=1;
                 shorePut(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, shapePtr, TableColumn<T>::dtype, &data);
             }
-            /*
             T get(uInt rowid){
-
+                int err = shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, shapePtr, &(TableColumn<T>::dtype));
+                if (err){
+                    cout << "ScalarColumn::get() Error!" << endl;
+                    return 0;
+                }
+                T scalar;
+                shoreGet(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, shapePtr, &(TableColumn<T>::dtype), &scalar);
+                return scalar;
             }
-            */
+            Vector<T> getColumn(){
+                int err = shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), 0, shapePtr, &(TableColumn<T>::dtype));
+                if (err){
+                    cout << "ScalarColumn::get() Error!" << endl;
+                }
+                Bool deleteIt;
+                Vector<T> scalar;
+                T *data = scalar.getStorage (deleteIt);
+                shoreGet(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), 0, 0, shapePtr, &(TableColumn<T>::dtype), data);
+                scalar.putStorage (data, deleteIt);
+                return scalar;
+            }
             void get(uInt rowid, T& data){}
             ScalarColumn(Table const& tab, String const& name) :TableColumn<T> (tab, name){}
             ScalarColumn(){}
@@ -97,7 +115,6 @@ namespace casacore{
             bool hasContent(uInt){return true;}
             void putColumn(Vector<T> data){}
             unsigned int shapePtr[2];
-            Vector<T> getColumn(){Vector<T> tmp; return tmp;}
     };
 
     template<class T> class ArrayColumn : public TableColumn<T>{
@@ -141,6 +158,11 @@ namespace casacore{
             Array<T> getColumn(Slicer){Array<T> tmp; return tmp;}
             unsigned int shapePtr[11];
             IPosition shape;
+    };
+
+    template<class T> class ROScalarColumn: public ScalarColumn<T>{
+        public:
+            ROScalarColumn(casa::Table const& tab, casa::String const& name) :ScalarColumn<T> (tab, name){}
     };
 
     template<class T> class ROArrayColumn: public ArrayColumn<T>{

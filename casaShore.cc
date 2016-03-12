@@ -18,6 +18,7 @@ namespace casacore{
         dtype = shoreTypeBool; doid = tab.doid; columnName = name;
     }
     template<> TableColumn<char>::TableColumn(Table const& tab, String const& name){
+        cout << "shoreTypeChar, " <<shoreTypeChar << endl;
         dtype = shoreTypeChar; doid = tab.doid; columnName = name;
     }
     template<> TableColumn<unsigned char>::TableColumn(Table const& tab, String const& name){

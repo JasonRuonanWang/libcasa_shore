@@ -30,21 +30,26 @@ ifdef CASACORE_HOME
 	cp -r casaBullshit/tables $(CASACORE_HOME)/include/casacore
 	rm -rf $(CASACORE_HOME)/lib/libcasa_tables* 
 	rm -rf $(CASACORE_HOME)/lib/lib*stman* 
-	cp $(TARGET_MINOR) $(CASACORE_HOME)/lib
-	cd $(CASACORE_HOME)/lib
-	ln -s $(TARGET_MINOR) $(CASACORE_HOME)/lib/$(TARGET_MAJOR)
-	ln -s $(TARGET_MINOR) $(CASACORE_HOME)/lib/$(TARGET)
+	cp $(TARGET) $(CASACORE_HOME)/lib
+#	cp $(TARGET_MINOR) $(CASACORE_HOME)/lib
+#	cd $(CASACORE_HOME)/lib
+#	ln -s $(TARGET_MINOR) $(CASACORE_HOME)/lib/$(TARGET_MAJOR)
+#	ln -s $(TARGET_MINOR) $(CASACORE_HOME)/lib/$(TARGET)
 endif
 
 
 $(TARGET):$(SRC)
 	cp casaShore.h casaBullshit/tables/
+	c++ -fPIC -lcasa_casa -lShoreClient $(SRC) --shared -o $(TARGET)
+
 ifeq ($(OS), Darwin)
-	c++ -fPIC -lcasa_casa -lShoreClient $(SRC) --shared -o $(TARGET_MINOR) -compatibility_version $(VERSION_MAJOR).0.0 -current_version $(VERSION_MAJOR).$(VERSION_MIDDLE).$(VERSION_MINOR)
+#	c++ -fPIC -lcasa_casa -lShoreClient $(SRC) --shared -o $(TARGET_MINOR) -compatibility_version $(VERSION_MAJOR).0.0 -current_version $(VERSION_MAJOR).$(VERSION_MIDDLE).$(VERSION_MINOR)
 else
-	c++ -fPIC -lcasa_casa -lShoreClient $(SRC) --shared -o $(TARGET_MINOR) -Wl,-soname,$(TARGET_MAJOR)
+#	c++ -fPIC -lcasa_casa -lShoreClient $(SRC) --shared -o $(TARGET_MINOR) -Wl,-soname,$(TARGET_MAJOR)
 endif
+
 
 clean:
 	rm -rf *.dylib *.so
+	cd examples; make clean;
 
