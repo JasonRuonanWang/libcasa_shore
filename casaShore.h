@@ -85,7 +85,7 @@ namespace casacore{
                 shorePut(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, shapePtr, TableColumn<T>::dtype, &data);
             }
             T get(uInt rowid){
-                int err = shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, shapePtr, &(TableColumn<T>::dtype));
+                int err = shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), &rows, shapePtr, &(TableColumn<T>::dtype));
                 if (err){
                     cout << "ScalarColumn::get() Error!" << endl;
                     return 0;
@@ -95,17 +95,18 @@ namespace casacore{
                 return scalar;
             }
             Vector<T> getColumn(){
-                int err = shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), 0, shapePtr, &(TableColumn<T>::dtype));
+                int err = shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), &rows, shapePtr, &(TableColumn<T>::dtype));
                 if (err){
-                    cout << "ScalarColumn::get() Error!" << endl;
+                    cout << "ScalarColumn::getColumn() Error!" << endl;
                 }
                 Bool deleteIt;
-                Vector<T> scalar;
+                Vector<T> scalar(rows);
                 T *data = scalar.getStorage (deleteIt);
                 shoreGet(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), 0, 0, shapePtr, &(TableColumn<T>::dtype), data);
                 scalar.putStorage (data, deleteIt);
                 return scalar;
             }
+            void putColumn(Vector<T> data){}
             void get(uInt rowid, T& data){}
             ScalarColumn(Table const& tab, String const& name) :TableColumn<T> (tab, name){}
             ScalarColumn(){}
@@ -113,8 +114,8 @@ namespace casacore{
             T operator() (uInt rownr) {T value; get(rownr, value); return value;}
             bool isDefined(uInt){return true;}
             bool hasContent(uInt){return true;}
-            void putColumn(Vector<T> data){}
-            unsigned int shapePtr[2];
+            unsigned int shapePtr[11];
+            unsigned int rows;
     };
 
     template<class T> class ArrayColumn : public TableColumn<T>{
@@ -131,7 +132,7 @@ namespace casacore{
                 data.freeStorage(dataPtr, deleteIt);
             }
             Array<T> get(uInt rowid){
-                shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, shapePtr, &(TableColumn<T>::dtype));
+                shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), &rows, shapePtr, &(TableColumn<T>::dtype));
                 IPosition shape_i(shapePtr[0]);
                 for (int i=0; i<shapePtr[0]; i++){
                     shape_i[i] = shapePtr[i+1];
@@ -157,6 +158,7 @@ namespace casacore{
             Array<T> getColumn(){Array<T> tmp; return tmp;}
             Array<T> getColumn(Slicer){Array<T> tmp; return tmp;}
             unsigned int shapePtr[11];
+            unsigned int rows;
             IPosition shape;
     };
 

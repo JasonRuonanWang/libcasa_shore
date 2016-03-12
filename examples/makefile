@@ -5,10 +5,11 @@ else
 endif
 
 CCFLAGS=
-LDFLAGS=-lcasa_tables -lcasa_casa -lmxml -lshoreClient
+LDFLAGS=-lcasa_tables -lcasa_casa -lshoreClient
 TARGET=\
 	   writeScalar \
 	   writeArray \
+	   writeArrayColumn \
 	   readScalarColumn \
 	   readArray \
 	   readArrayColumn \
@@ -23,6 +24,6 @@ shoreClient:
 	cd ..; make;
 
 clean:
-	rm -rf $(TARGET:=.exe) *.dSYM *.so
+	rm -rf *.exe *.dSYM *.so
 
 re: clean shoreClient all 

@@ -26,7 +26,6 @@
 #include <casacore/tables/Tables/ArrayColumn.h>
 #include <casacore/tables/DataMan/TiledShapeStMan.h>
 #include <casacore/casa/namespace.h>
-#include <casacore/tables/Tables/TableLock.h>
 
 int main(int argc, char **argv){
 
@@ -37,7 +36,7 @@ int main(int argc, char **argv){
     string filename = argv[1];
 
 
-    IPosition data_pos = IPosition(4,6,5,8,10);
+    IPosition data_pos = IPosition(2,6,5);
     int NrRows = 4;
 
     Array<Bool> arr_Bool(data_pos);
