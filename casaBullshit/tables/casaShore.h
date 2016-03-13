@@ -84,6 +84,15 @@ namespace casacore{
                 shapePtr[1]=1;
                 shorePut(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, shapePtr, TableColumn<T>::dtype, &data);
             }
+            void putColumn(Vector<T> data){
+                shapePtr[0]=1;
+                shapePtr[1]=1;
+                IPosition shape = data.shape();
+                Bool deleteIt;
+                const T *dataPtr = data.getStorage (deleteIt);
+                shorePut(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), 0, shape(0), shapePtr, TableColumn<T>::dtype, dataPtr);
+                data.freeStorage(dataPtr, deleteIt);
+            }
             T get(uInt rowid){
                 int err = shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), &rows, shapePtr, &(TableColumn<T>::dtype));
                 if (err){
@@ -105,7 +114,6 @@ namespace casacore{
                 scalar.putStorage (data, deleteIt);
                 return scalar;
             }
-            void putColumn(Vector<T> data){}
             void get(uInt rowid, T& data){}
             ScalarColumn(Table const& tab, String const& name) :TableColumn<T> (tab, name){}
             ScalarColumn(){}

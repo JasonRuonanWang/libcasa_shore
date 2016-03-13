@@ -8,6 +8,7 @@ CCFLAGS=
 LDFLAGS=-lcasa_tables -lcasa_casa -lshoreClient
 TARGET=\
 	   writeScalar \
+	   writeScalarColumn \
 	   writeArray \
 	   writeArrayColumn \
 	   readScalar \
