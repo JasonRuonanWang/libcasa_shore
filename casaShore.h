@@ -91,7 +91,7 @@ namespace casacore{
                     return 0;
                 }
                 T scalar;
-                shoreGet(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, shapePtr, &(TableColumn<T>::dtype), &scalar);
+                shoreGet(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, &scalar);
                 return scalar;
             }
             Vector<T> getColumn(){
@@ -102,7 +102,7 @@ namespace casacore{
                 Bool deleteIt;
                 Vector<T> scalar(rows);
                 T *data = scalar.getStorage (deleteIt);
-                shoreGet(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), 0, 0, shapePtr, &(TableColumn<T>::dtype), data);
+                shoreGet(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), 0, 0, data);
                 scalar.putStorage (data, deleteIt);
                 return scalar;
             }
@@ -140,7 +140,22 @@ namespace casacore{
                 Bool deleteIt;
                 Array<T> arr(shape_i);
                 T *data = arr.getStorage (deleteIt);
-                shoreGet(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, shapePtr, &(TableColumn<T>::dtype), data);
+                shoreGet(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, data);
+                arr.putStorage (data, deleteIt);
+                return arr;
+            }
+            Array<T> getColumn(){
+                shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), &rows, shapePtr, &(TableColumn<T>::dtype));
+                IPosition shape_i(shapePtr[0]+1);
+                shape_i[0] = rows;
+                for (int i=1; i<shapePtr[0]+1; i++){
+                    shape_i[i] = shapePtr[i];
+                }
+                Bool deleteIt;
+                Array<T> arr(shape_i);
+                cout << shape_i << endl;
+                T *data = arr.getStorage (deleteIt);
+                shoreGet(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), 0, rows, data);
                 arr.putStorage (data, deleteIt);
                 return arr;
             }
@@ -155,7 +170,6 @@ namespace casacore{
             void putSlice(uInt rowid, Slicer, Array<T> data){}
             Array<T> getSlice(uInt, Slicer){Array<T> tmp; return tmp;}
             void getSlice(uInt, Slicer, Array<T>){}
-            Array<T> getColumn(){Array<T> tmp; return tmp;}
             Array<T> getColumn(Slicer){Array<T> tmp; return tmp;}
             unsigned int shapePtr[11];
             unsigned int rows;

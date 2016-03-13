@@ -37,7 +37,7 @@ int main(int argc, char **argv){
     cout << endl << "Column: data_Bool, Shape: " << arr_Bool.shape() << endl;
     for (int i=0; i<arr_Bool.nelements(); i++){
         cout << vec_Bool[i] << "  ";
-        if ((i+1) % (arr_Bool.shape())(0) == 0)
+        if ((i+1) % (arr_Bool.shape())(1) == 0)
             cout << endl;
     }
 
@@ -47,7 +47,7 @@ int main(int argc, char **argv){
     cout << endl << "Column: data_uChar, Shape: " << arr_uChar.shape() << endl;
     for (int i=0; i<arr_uChar.nelements(); i++){
         cout << (uInt)vec_uChar[i] << "  ";
-        if ((i+1) % (arr_uChar.shape())(0) == 0)
+        if ((i+1) % (arr_uChar.shape())(1) == 0)
             cout << endl;
     }
 
@@ -57,7 +57,7 @@ int main(int argc, char **argv){
     cout << endl << "Column: data_Short, Shape: " << arr_Short.shape() << endl;
     for (int i=0; i<arr_Short.nelements(); i++){
         cout << vec_Short[i] << "  ";
-        if ((i+1) % (arr_Short.shape())(0) == 0)
+        if ((i+1) % (arr_Short.shape())(1) == 0)
             cout << endl;
     }
 
@@ -67,7 +67,7 @@ int main(int argc, char **argv){
     cout << endl << "Column: data_uShort, Shape: " << arr_uShort.shape() << endl;
     for (int i=0; i<arr_uShort.nelements(); i++){
         cout << vec_uShort[i] << "  ";
-        if ((i+1) % (arr_uShort.shape())(0) == 0)
+        if ((i+1) % (arr_uShort.shape())(1) == 0)
             cout << endl;
     }
 
@@ -77,7 +77,7 @@ int main(int argc, char **argv){
     cout << endl << "Column: data_Int, Shape: " << arr_Int.shape() << endl;
     for (int i=0; i<arr_Int.nelements(); i++){
         cout << vec_Int[i] << "  ";
-        if ((i+1) % (arr_Int.shape())(0) == 0)
+        if ((i+1) % (arr_Int.shape())(1) == 0)
             cout << endl;
     }
 
@@ -87,7 +87,7 @@ int main(int argc, char **argv){
     cout << endl << "Column: data_uInt, Shape: " << arr_uInt.shape() << endl;
     for (int i=0; i<arr_uInt.nelements(); i++){
         cout << vec_uInt[i] << "  ";
-        if ((i+1) % (arr_uInt.shape())(0) == 0)
+        if ((i+1) % (arr_uInt.shape())(1) == 0)
             cout << endl;
     }
 
@@ -97,7 +97,7 @@ int main(int argc, char **argv){
     cout << endl << "Column: data_Float, Shape: " << arr_Float.shape() << endl;
     for (int i=0; i<arr_Float.nelements(); i++){
         cout << vec_Float[i] << "  ";
-        if ((i+1) % (arr_Float.shape())(0) == 0)
+        if ((i+1) % (arr_Float.shape())(1) == 0)
             cout << endl;
     }
 
@@ -107,7 +107,7 @@ int main(int argc, char **argv){
     cout << endl << "Column: data_Double, Shape: " << arr_Double.shape() << endl;
     for (int i=0; i<arr_Double.nelements(); i++){
         cout << vec_Double[i] << "  ";
-        if ((i+1) % (arr_Double.shape())(0) == 0)
+        if ((i+1) % (arr_Double.shape())(1) == 0)
             cout << endl;
     }
 
@@ -117,7 +117,7 @@ int main(int argc, char **argv){
     cout << endl << "Column: data_Complex, Shape: " << arr_Complex.shape() << endl;
     for (int i=0; i<arr_Complex.nelements(); i++){
         cout << vec_Complex[i] << "  ";
-        if ((i+1) % (arr_Complex.shape())(0) == 0)
+        if ((i+1) % (arr_Complex.shape())(1) == 0)
             cout << endl;
     }
 
@@ -127,7 +127,7 @@ int main(int argc, char **argv){
     cout << endl << "Column: data_DComplex, Shape: " << arr_DComplex.shape() << endl;
     for (int i=0; i<arr_DComplex.nelements(); i++){
         cout << vec_DComplex[i] << "  ";
-        if ((i+1) % (arr_DComplex.shape())(0) == 0)
+        if ((i+1) % (arr_DComplex.shape())(1) == 0)
             cout << endl;
     }
 
