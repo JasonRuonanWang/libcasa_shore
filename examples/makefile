@@ -10,6 +10,7 @@ TARGET=\
 	   writeScalar \
 	   writeArray \
 	   writeArrayColumn \
+	   readScalar \
 	   readScalarColumn \
 	   readArray \
 	   readArrayColumn \

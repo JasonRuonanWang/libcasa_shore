@@ -87,7 +87,6 @@ namespace casacore{
             T get(uInt rowid){
                 int err = shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), &rows, shapePtr, &(TableColumn<T>::dtype));
                 if (err){
-                    cout << "ScalarColumn::get() Error!" << endl;
                     return 0;
                 }
                 T scalar;
@@ -97,7 +96,7 @@ namespace casacore{
             Vector<T> getColumn(){
                 int err = shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), &rows, shapePtr, &(TableColumn<T>::dtype));
                 if (err){
-                    cout << "ScalarColumn::getColumn() Error!" << endl;
+                    return Vector<T>(0);
                 }
                 Bool deleteIt;
                 Vector<T> scalar(rows);
@@ -131,6 +130,8 @@ namespace casacore{
                 shorePut(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), rowid, 1, shapePtr, TableColumn<T>::dtype, dataPtr);
                 data.freeStorage(dataPtr, deleteIt);
             }
+            void putColumn(Array<T> data){
+            }
             Array<T> get(uInt rowid){
                 shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), &rows, shapePtr, &(TableColumn<T>::dtype));
                 IPosition shape_i(shapePtr[0]);
@@ -153,7 +154,6 @@ namespace casacore{
                 }
                 Bool deleteIt;
                 Array<T> arr(shape_i);
-                cout << shape_i << endl;
                 T *data = arr.getStorage (deleteIt);
                 shoreGet(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), 0, rows, data);
                 arr.putStorage (data, deleteIt);
