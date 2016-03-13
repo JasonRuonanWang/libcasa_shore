@@ -43,7 +43,7 @@ int main(int argc, char **argv){
     Vector<Char> vec_Char = col_Char.getColumn();
     cout << "index_Char column: " << endl;
     for (int i=0; i<vec_Char.nelements(); i++){
-        cout << vec_Char[i] << "  ";
+        cout << +vec_Char[i] << "  ";
     }
     cout << endl << endl;
 
