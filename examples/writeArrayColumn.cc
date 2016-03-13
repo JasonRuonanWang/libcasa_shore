@@ -35,9 +35,9 @@ int main(int argc, char **argv){
     }
     string filename = argv[1];
 
-
-    IPosition data_pos = IPosition(2,6,5);
     int NrRows = 4;
+
+    IPosition data_pos = IPosition(3,NrRows,6,5);
 
     Array<Bool> arr_Bool(data_pos);
     Array<Char> arr_Char(data_pos);
@@ -95,19 +95,17 @@ int main(int argc, char **argv){
     ArrayColumn<DComplex> col_DComplex (tab, "data_DComplex");
 
     // write data into the column objects
-    for (uInt i=0; i<NrRows; i++) {
-        arr_Bool = 1; col_Bool.put(i, arr_Bool);
-        arr_Char = 1; col_Char.put(i, arr_Char);
-        arr_uChar = 2; col_uChar.put(i, arr_uChar);
-        arr_Short = -3; col_Short.put(i, arr_Short);
-        arr_uShort = 4; col_uShort.put(i, arr_uShort);
-        indgen(arr_Int, (Int)i*100); col_Int.put(i, arr_Int);
-        indgen(arr_uInt, (uInt)i*100); col_uInt.put(i, arr_uInt);
-        indgen(arr_Float, (Float)i*100, (Float)0.1); col_Float.put(i, arr_Float);
-        indgen(arr_Double, (Double)i*100, (Double)0.01); col_Double.put(i, arr_Double);
-        indgen(arr_Complex, (Complex)i*100, (Complex)0.001); col_Complex.put(i, arr_Complex);
-        arr_DComplex = 5; col_DComplex.put(i, arr_DComplex);
-    }
+    arr_Bool = 1; col_Bool.putColumn(arr_Bool);
+    arr_Char = 1; col_Char.putColumn(arr_Char);
+    arr_uChar = 2; col_uChar.putColumn(arr_uChar);
+    arr_Short = -3; col_Short.putColumn(arr_Short);
+    arr_uShort = 4; col_uShort.putColumn(arr_uShort);
+    indgen(arr_Int, 100); col_Int.putColumn(arr_Int);
+    indgen(arr_uInt, (uInt)200); col_uInt.putColumn(arr_uInt);
+    indgen(arr_Float, (Float)300, (Float)0.1); col_Float.putColumn(arr_Float);
+    indgen(arr_Double, (Double)400, (Double)0.01); col_Double.putColumn(arr_Double);
+    indgen(arr_Complex, (Complex)500, (Complex)0.001); col_Complex.putColumn(arr_Complex);
+    arr_DComplex = 5; col_DComplex.putColumn(arr_DComplex);
 
     Vector<Bool> vec_Bool = arr_Bool.reform(IPosition(1,arr_Bool.nelements()));
     cout << endl << "Column: data_Bool, Shape: " << arr_Bool.shape() << endl;

@@ -139,6 +139,15 @@ namespace casacore{
                 data.freeStorage(dataPtr, deleteIt);
             }
             void putColumn(Array<T> data){
+                shapePtr[0] = data.ndim() - 1;
+                shape = data.shape();
+                for (unsigned int i=0; i<shapePtr[0]; i++){
+                    shapePtr[i+1] = shape[i+1];
+                }
+                bool deleteIt;
+                const T *dataPtr = data.getStorage (deleteIt);
+                shorePut(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), 0, shape(0), shapePtr, TableColumn<T>::dtype, dataPtr);
+                data.freeStorage(dataPtr, deleteIt);
             }
             Array<T> get(uInt rowid){
                 shoreQuery(TableColumn<T>::doid.c_str(), TableColumn<T>::columnName.c_str(), &rows, shapePtr, &(TableColumn<T>::dtype));
