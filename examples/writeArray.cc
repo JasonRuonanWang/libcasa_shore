@@ -83,31 +83,31 @@ int main(int argc, char **argv){
     Table tab(newtab,  NrRows);
 
     // define column objects and link them to the table
-    ArrayColumn<Bool> col_Bool (tab, "data_Bool");
-    ArrayColumn<Char> col_Char (tab, "data_Char");
-    ArrayColumn<uChar> col_uChar (tab, "data_uChar");
-    ArrayColumn<Short> col_Short (tab, "data_Short");
-    ArrayColumn<uShort> col_uShort (tab, "data_uShort");
-    ArrayColumn<Int> col_Int (tab, "data_Int");
-    ArrayColumn<uInt> col_uInt (tab, "data_uInt");
-    ArrayColumn<Float> col_Float (tab, "data_Float");
-    ArrayColumn<Double> col_Double (tab, "data_Double");
-    ArrayColumn<Complex> col_Complex (tab, "data_Complex");
-    ArrayColumn<DComplex> col_DComplex (tab, "data_DComplex");
+    ArrayColumn<Bool> data_Bool (tab, "data_Bool");
+    ArrayColumn<Char> data_Char (tab, "data_Char");
+    ArrayColumn<uChar> data_uChar (tab, "data_uChar");
+    ArrayColumn<Short> data_Short (tab, "data_Short");
+    ArrayColumn<uShort> data_uShort (tab, "data_uShort");
+    ArrayColumn<Int> data_Int (tab, "data_Int");
+    ArrayColumn<uInt> data_uInt (tab, "data_uInt");
+    ArrayColumn<Float> data_Float (tab, "data_Float");
+    ArrayColumn<Double> data_Double (tab, "data_Double");
+    ArrayColumn<Complex> data_Complex (tab, "data_Complex");
+    ArrayColumn<DComplex> data_DComplex (tab, "data_DComplex");
 
     // write data into the column objects
     for (uInt i=0; i<NrRows; i++) {
-        arr_Bool = 1; col_Bool.put(i, arr_Bool);
-        arr_Char = 1; col_Char.put(i, arr_Char);
-        arr_uChar = 2; col_uChar.put(i, arr_uChar);
-        arr_Short = -3; col_Short.put(i, arr_Short);
-        arr_uShort = 4; col_uShort.put(i, arr_uShort);
-        indgen(arr_Int, (Int)i*100); col_Int.put(i, arr_Int);
-        indgen(arr_uInt, (uInt)i*100); col_uInt.put(i, arr_uInt);
-        indgen(arr_Float, (Float)i*100, (Float)0.1); col_Float.put(i, arr_Float);
-        indgen(arr_Double, (Double)i*100, (Double)0.01); col_Double.put(i, arr_Double);
-        indgen(arr_Complex, (Complex)i*100, (Complex)0.001); col_Complex.put(i, arr_Complex);
-        arr_DComplex = 5; col_DComplex.put(i, arr_DComplex);
+        arr_Bool = 1; data_Bool.put(i, arr_Bool);
+        arr_Char = 1; data_Char.put(i, arr_Char);
+        arr_uChar = 2; data_uChar.put(i, arr_uChar);
+        arr_Short = -3; data_Short.put(i, arr_Short);
+        arr_uShort = 4; data_uShort.put(i, arr_uShort);
+        indgen(arr_Int, (Int)i*100); data_Int.put(i, arr_Int);
+        indgen(arr_uInt, (uInt)i*100); data_uInt.put(i, arr_uInt);
+        indgen(arr_Float, (Float)i*100, (Float)0.1); data_Float.put(i, arr_Float);
+        indgen(arr_Double, (Double)i*100, (Double)0.01); data_Double.put(i, arr_Double);
+        indgen(arr_Complex, (Complex)i*100, (Complex)0.001); data_Complex.put(i, arr_Complex);
+        arr_DComplex = 5; data_DComplex.put(i, arr_DComplex);
     }
 
     Vector<Bool> vec_Bool = arr_Bool.reform(IPosition(1,arr_Bool.nelements()));
