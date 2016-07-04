@@ -14,9 +14,10 @@ namespace casacore{
         doid = filename;
     }
 
-    template<> TableColumn<bool>::TableColumn(Table const& tab, String const& name){
+    TableColumn::TableColumn(Table const& tab, String const& name){
         dtype = shoreTypeBool; doid = tab.doid; columnName = name;
     }
+    /*
     template<> TableColumn<char>::TableColumn(Table const& tab, String const& name){
         dtype = shoreTypeChar; doid = tab.doid; columnName = name;
     }
@@ -47,6 +48,7 @@ namespace casacore{
     template<> TableColumn<DComplex>::TableColumn(Table const& tab, String const& name){
         dtype = shoreTypeDComplex; doid = tab.doid; columnName = name;
     }
+    */
 
 
 }
