@@ -14,41 +14,73 @@ namespace casacore{
         doid = filename;
     }
 
-    TableColumn::TableColumn(Table const& tab, String const& name){
+    template<> ScalarColumn<bool>::ScalarColumn(Table const& tab, String const& name){
         dtype = shoreTypeBool; doid = tab.doid; columnName = name;
     }
-    /*
-    template<> TableColumn<char>::TableColumn(Table const& tab, String const& name){
+    template<> ScalarColumn<char>::ScalarColumn(Table const& tab, String const& name){
         dtype = shoreTypeChar; doid = tab.doid; columnName = name;
     }
-    template<> TableColumn<unsigned char>::TableColumn(Table const& tab, String const& name){
+    template<> ScalarColumn<unsigned char>::ScalarColumn(Table const& tab, String const& name){
         dtype = shoreTypeUChar; doid = tab.doid; columnName = name;
     }
-    template<> TableColumn<short>::TableColumn(Table const& tab, String const& name){
+    template<> ScalarColumn<short>::ScalarColumn(Table const& tab, String const& name){
         dtype = shoreTypeShort; doid = tab.doid; columnName = name;
     }
-    template<> TableColumn<unsigned short>::TableColumn(Table const& tab, String const& name){
+    template<> ScalarColumn<unsigned short>::ScalarColumn(Table const& tab, String const& name){
         dtype = shoreTypeUShort; doid = tab.doid; columnName = name;
     }
-    template<> TableColumn<int>::TableColumn(Table const& tab, String const& name){
+    template<> ScalarColumn<int>::ScalarColumn(Table const& tab, String const& name){
         dtype = shoreTypeInt; doid = tab.doid; columnName = name;
     }
-    template<> TableColumn<unsigned int>::TableColumn(Table const& tab, String const& name){
+    template<> ScalarColumn<unsigned int>::ScalarColumn(Table const& tab, String const& name){
         dtype = shoreTypeUInt; doid = tab.doid; columnName = name;
     }
-    template<> TableColumn<float>::TableColumn(Table const& tab, String const& name){
+    template<> ScalarColumn<float>::ScalarColumn(Table const& tab, String const& name){
         dtype = shoreTypeFloat; doid = tab.doid; columnName = name;
     }
-    template<> TableColumn<double>::TableColumn(Table const& tab, String const& name){
+    template<> ScalarColumn<double>::ScalarColumn(Table const& tab, String const& name){
         dtype = shoreTypeDouble; doid = tab.doid; columnName = name;
     }
-    template<> TableColumn<Complex>::TableColumn(Table const& tab, String const& name){
+    template<> ScalarColumn<Complex>::ScalarColumn(Table const& tab, String const& name){
         dtype = shoreTypeComplex; doid = tab.doid; columnName = name;
     }
-    template<> TableColumn<DComplex>::TableColumn(Table const& tab, String const& name){
+    template<> ScalarColumn<DComplex>::ScalarColumn(Table const& tab, String const& name){
         dtype = shoreTypeDComplex; doid = tab.doid; columnName = name;
     }
-    */
+
+    template<> ArrayColumn<bool>::ArrayColumn(Table const& tab, String const& name){
+        dtype = shoreTypeBool; doid = tab.doid; columnName = name;
+    }
+    template<> ArrayColumn<char>::ArrayColumn(Table const& tab, String const& name){
+        dtype = shoreTypeChar; doid = tab.doid; columnName = name;
+    }
+    template<> ArrayColumn<unsigned char>::ArrayColumn(Table const& tab, String const& name){
+        dtype = shoreTypeUChar; doid = tab.doid; columnName = name;
+    }
+    template<> ArrayColumn<short>::ArrayColumn(Table const& tab, String const& name){
+        dtype = shoreTypeShort; doid = tab.doid; columnName = name;
+    }
+    template<> ArrayColumn<unsigned short>::ArrayColumn(Table const& tab, String const& name){
+        dtype = shoreTypeUShort; doid = tab.doid; columnName = name;
+    }
+    template<> ArrayColumn<int>::ArrayColumn(Table const& tab, String const& name){
+        dtype = shoreTypeInt; doid = tab.doid; columnName = name;
+    }
+    template<> ArrayColumn<unsigned int>::ArrayColumn(Table const& tab, String const& name){
+        dtype = shoreTypeUInt; doid = tab.doid; columnName = name;
+    }
+    template<> ArrayColumn<float>::ArrayColumn(Table const& tab, String const& name){
+        dtype = shoreTypeFloat; doid = tab.doid; columnName = name;
+    }
+    template<> ArrayColumn<double>::ArrayColumn(Table const& tab, String const& name){
+        dtype = shoreTypeDouble; doid = tab.doid; columnName = name;
+    }
+    template<> ArrayColumn<Complex>::ArrayColumn(Table const& tab, String const& name){
+        dtype = shoreTypeComplex; doid = tab.doid; columnName = name;
+    }
+    template<> ArrayColumn<DComplex>::ArrayColumn(Table const& tab, String const& name){
+        dtype = shoreTypeDComplex; doid = tab.doid; columnName = name;
+    }
 
 
 }
