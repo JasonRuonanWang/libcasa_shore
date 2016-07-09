@@ -5,6 +5,7 @@ VERSION_MINOR=141
 SRC=casaShore.cc
 TARGET_PREFIX=libcasa_tables
 
+
 OS := $(shell uname)
 ifeq ($(OS), Darwin)
 	TARGET_SUFFIX=dylib
@@ -40,7 +41,9 @@ endif
 
 $(TARGET):$(SRC)
 	cp casaShore.h casaBullshit/tables/
-	c++ -fPIC -lcasa_casa -lShoreClient $(SRC) --shared -o $(TARGET)
+	cd shoreClient; make cython;
+	cd shoreClient; make object;
+	c++ -fPIC -lcasa_casa shoreClient/shoreClientCy.o shoreClient/shoreClient.o $(SRC) --shared -o $(TARGET) -lpython2.7
 
 ifeq ($(OS), Darwin)
 #	c++ -fPIC -lcasa_casa -lShoreClient $(SRC) --shared -o $(TARGET_MINOR) -compatibility_version $(VERSION_MAJOR).0.0 -current_version $(VERSION_MAJOR).$(VERSION_MIDDLE).$(VERSION_MINOR)
@@ -52,4 +55,5 @@ endif
 clean:
 	rm -rf *.dylib *.so
 	cd examples; make clean;
+	cd shoreClient; make clean;
 

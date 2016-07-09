@@ -14,6 +14,51 @@ namespace casacore{
         doid = filename;
     }
 
+    template<> void ScalarColumn<bool>::put(uInt rowid, bool data){
+        shapePtr[0]=1; shapePtr[1]=1;
+        shorePut(TableColumn::doid.c_str(), TableColumn::columnName.c_str(), rowid, 1, shapePtr, TableColumn::dtype, &data);
+    }
+    template<> void ScalarColumn<char>::put(uInt rowid, char data){
+        shapePtr[0]=1; shapePtr[1]=1;
+        shorePut(TableColumn::doid.c_str(), TableColumn::columnName.c_str(), rowid, 1, shapePtr, TableColumn::dtype, &data);
+    }
+    template<> void ScalarColumn<unsigned char>::put(uInt rowid, unsigned char data){
+        shapePtr[0]=1; shapePtr[1]=1;
+        shorePut(TableColumn::doid.c_str(), TableColumn::columnName.c_str(), rowid, 1, shapePtr, TableColumn::dtype, &data);
+    }
+    template<> void ScalarColumn<short>::put(uInt rowid, short data){
+        shapePtr[0]=1; shapePtr[1]=1;
+        shorePut(TableColumn::doid.c_str(), TableColumn::columnName.c_str(), rowid, 1, shapePtr, TableColumn::dtype, &data);
+    }
+    template<> void ScalarColumn<unsigned short>::put(uInt rowid, unsigned short data){
+        shapePtr[0]=1; shapePtr[1]=1;
+        shorePut(TableColumn::doid.c_str(), TableColumn::columnName.c_str(), rowid, 1, shapePtr, TableColumn::dtype, &data);
+    }
+    template<> void ScalarColumn<int>::put(uInt rowid, int data){
+        shapePtr[0]=1; shapePtr[1]=1;
+        shorePut(TableColumn::doid.c_str(), TableColumn::columnName.c_str(), rowid, 1, shapePtr, TableColumn::dtype, &data);
+    }
+    template<> void ScalarColumn<unsigned int>::put(uInt rowid, unsigned int data){
+        shapePtr[0]=1; shapePtr[1]=1;
+        shorePut(TableColumn::doid.c_str(), TableColumn::columnName.c_str(), rowid, 1, shapePtr, TableColumn::dtype, &data);
+    }
+    template<> void ScalarColumn<float>::put(uInt rowid, float data){
+        shapePtr[0]=1; shapePtr[1]=1;
+        shorePut(TableColumn::doid.c_str(), TableColumn::columnName.c_str(), rowid, 1, shapePtr, TableColumn::dtype, &data);
+    }
+    template<> void ScalarColumn<double>::put(uInt rowid, double data){
+        shapePtr[0]=1; shapePtr[1]=1;
+        shorePut(TableColumn::doid.c_str(), TableColumn::columnName.c_str(), rowid, 1, shapePtr, TableColumn::dtype, &data);
+    }
+    template<> void ScalarColumn<Complex>::put(uInt rowid, Complex data){
+        shapePtr[0]=1; shapePtr[1]=1;
+        shorePut(TableColumn::doid.c_str(), TableColumn::columnName.c_str(), rowid, 1, shapePtr, TableColumn::dtype, &data);
+    }
+    template<> void ScalarColumn<DComplex>::put(uInt rowid, DComplex data){
+        shapePtr[0]=1; shapePtr[1]=1;
+        shorePut(TableColumn::doid.c_str(), TableColumn::columnName.c_str(), rowid, 1, shapePtr, TableColumn::dtype, &data);
+    }
+
     template<> ScalarColumn<bool>::ScalarColumn(Table const& tab, String const& name){
         dtype = shoreTypeBool; doid = tab.doid; columnName = name;
     }

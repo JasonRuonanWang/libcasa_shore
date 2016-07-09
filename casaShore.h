@@ -10,7 +10,7 @@
 #include <casacore/casa/Exceptions/Error.h>
 
 extern "C"{
-#include <shoreClient.h>
+#include "shoreClient/shoreClient.h"
 }
 
 namespace casacore{
@@ -161,11 +161,7 @@ namespace casacore{
 
     template<class T> class ScalarColumn : public TableColumn{
         public:
-            void put(uInt rowid, T data){
-                shapePtr[0]=1;
-                shapePtr[1]=1;
-                shorePut(TableColumn::doid.c_str(), TableColumn::columnName.c_str(), rowid, 1, shapePtr, TableColumn::dtype, &data);
-            }
+            void put(uInt rowid, T data);
             void putColumn(Vector<T> data){
                 shapePtr[0]=1;
                 shapePtr[1]=1;
