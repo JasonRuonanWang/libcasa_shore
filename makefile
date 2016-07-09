@@ -41,6 +41,7 @@ endif
 
 $(TARGET):$(SRC)
 	cp casaShore.h casaBullshit/tables/
+	cp shoreClient/shoreClient.h casaBullshit/tables/shoreClient/
 	cd shoreClient; make cython;
 	cd shoreClient; make object;
 	c++ -fPIC -lcasa_casa shoreClient/shoreClientCy.o shoreClient/shoreClient.o $(SRC) --shared -o $(TARGET) -lpython2.7

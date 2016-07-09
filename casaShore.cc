@@ -13,7 +13,7 @@ namespace casacore{
     Table::Table(string filename){
         doid = filename;
     }
-
+/*
     template<> void ScalarColumn<bool>::put(uInt rowid, bool data){
         shapePtr[0]=1; shapePtr[1]=1;
         shorePut(TableColumn::doid.c_str(), TableColumn::columnName.c_str(), rowid, 1, shapePtr, TableColumn::dtype, &data);
@@ -58,6 +58,7 @@ namespace casacore{
         shapePtr[0]=1; shapePtr[1]=1;
         shorePut(TableColumn::doid.c_str(), TableColumn::columnName.c_str(), rowid, 1, shapePtr, TableColumn::dtype, &data);
     }
+*/
 
     template<> ScalarColumn<bool>::ScalarColumn(Table const& tab, String const& name){
         dtype = shoreTypeBool; doid = tab.doid; columnName = name;
